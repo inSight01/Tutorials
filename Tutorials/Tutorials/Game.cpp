@@ -2,21 +2,23 @@
 
 Game::Game()
 {
+	_looping = true;
 }
 
 void Game::begin()
 {
 	while (_looping) {
 
-		// Reset game, even if it's already reset
-		_player1  = 'X';
-		_player2  = 'O';
-		_playerT  = 'X';
-		_gameOver = false;
-		_winner   = 0;
-		for (int y = 0; y < 3; y++) {
-			for (int x = 0; x < 3; x++) {
-				data[y][x] = 0;
+		// Reset game
+		if (_gameOver) {
+			_player1 = 'X';
+			_player2 = 'O';
+			_playerT = 'X';
+			_gameOver = false;
+			for (int y = 0; y < 3; y++) {
+				for (int x = 0; x < 3; x++) {
+					data[y][x] = 0;
+				}
 			}
 		}
 		
@@ -216,7 +218,7 @@ void Game::endMenu(int &id)
 {
 	_gameOver = true;
 
-	if (id = 3) _playerT = 'D';
+	if (id == 3) _playerT = 'D';
 	
 	cout << "|=                                                                          =|" << endl;
 	cout << "|============================================================================|" << endl;
@@ -303,12 +305,14 @@ void Game::updatePVCEasy()
 	}
 
 	if (_playerT == _player2) {
+		int i = 0;
+
 		int yCor = randomGenerator(0, 2);
 		int xCor = randomGenerator(1, 3);
 
 		if (yCor == 0) rowSelection = 'a';
 		if (yCor == 1) rowSelection = 'b';
-		if (yCor == 2) rowSelection - 'c';
+		if (yCor == 2) rowSelection = 'c';
 
 		colSelection = xCor;
 
@@ -350,7 +354,7 @@ void Game::updatePVCHard()
 
 		if (yCor == 0) rowSelection = 'a';
 		if (yCor == 1) rowSelection = 'b';
-		if (yCor == 2) rowSelection - 'c';
+		if (yCor == 2) rowSelection = 'c';
 
 		colSelection = xCor;
 
@@ -565,6 +569,9 @@ void Game::updatePVCHard()
 			rowSelection = 'c';
 			colSelection = 1;
 		}
+
+		cout << "|= Please select a row    : " << rowSelection << "                                               =|" << endl;
+		cout << "|= Please select a column : " << colSelection << "                                               =|" << endl;
 	}
 
 	processInput();
@@ -725,12 +732,15 @@ int Game::checkData()
 	}
 
 	// Run through board to see if if any spaces left
+	// If there is one space left then fill it.
 	int acc = 0;
 	int com = 9;
 	
 	for (int y = 0; y < 3; y++) {
 		for (int x = 0; x < 3; x++) {
-			if (data[y][x] > 0) acc++;
+			if (data[y][x] > 0) {
+				acc++;
+			}
 		}
 	}
 
@@ -746,9 +756,7 @@ int Game::randomGenerator(int min, int max)
 
 	uniform_int_distribution<int> integer(min, max);
 
-	int result = integer(randomGenerator);
-
-	return result;
+	return integer(randomGenerator);
 }
 
 string Game::block(int y, int x, int z)
@@ -772,7 +780,6 @@ string Game::block(int y, int x, int z)
 
 void Game::renderBoard()
 {
-	cout << rowSelection << ":" << colSelection << endl;
 	// Awesome triple for loop
 	for (int row = 0; row < _numRows; row++) {
 		if (row == 0) {
@@ -875,7 +882,7 @@ void Game::renderBoard()
 			cout << endl;
 		}
 		if (row == 0 || row == 1) {
-			cout << "|=    |===========|     ==============================                      =|";
+			cout << "|=    |===========|     ===============================                     =|";
 			cout << endl;
 		}
 	}

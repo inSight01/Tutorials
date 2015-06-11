@@ -16,7 +16,7 @@ public:
 
 private:
 	// This will be true for running while loops
-	bool _looping = true;
+	bool _looping = false;
 
 	// This will store an integer for menu selections
 	int _menuSelection = 0;
@@ -31,9 +31,6 @@ private:
 
 	// Game status
 	bool _gameOver = false;
-
-	// Winner
-	int _winner = 0;
 
 	// Variables
 	const static int _numRows = 3;
